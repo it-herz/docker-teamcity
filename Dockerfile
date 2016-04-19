@@ -1,4 +1,4 @@
-FROM podbox/tomcat8
+FROM itherz/tomcat8
 
 RUN apt-get -qq update         \
  && apt-get -qq install -y git \
@@ -17,7 +17,7 @@ ENV CATALINA_OPTS                \
  -Xss256k                        \
  -server                         \
  -XX:+UseCompressedOops          \
- -Djsse.enableSNIExtension=false \
+ -Djsse.enableSNIExtension=true  \
  -Djava.awt.headless=true        \
  -Dfile.encoding=UTF-8           \
  -Duser.timezone=Europe/Paris
