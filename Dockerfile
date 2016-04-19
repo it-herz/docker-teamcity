@@ -20,7 +20,7 @@ ENV CATALINA_OPTS                \
  -Djsse.enableSNIExtension=true  \
  -Djava.awt.headless=true        \
  -Dfile.encoding=UTF-8           \
- -Duser.timezone=Europe/Paris
+ -Duser.timezone=Europe/Moscow
 
 RUN sed -i 's/connectionTimeout="20000"/connectionTimeout="60000" useBodyEncodingForURI="true" socket.txBufSize="64000" socket.rxBufSize="64000"/' conf/server.xml
 
