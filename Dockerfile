@@ -22,13 +22,25 @@ ENV CATALINA_OPTS                \
  -Dfile.encoding=UTF-8           \
  -Duser.timezone=Europe/Moscow
 
-RUN sed -i 's/connectionTimeout="20000"/connectionTimeout="60000" useBodyEncodingForURI="true" socket.txBufSize="64000" socket.rxBufSize="64000"/' conf/server.xml
+ENV MAVEN_OPTS			 \
+ -Xms1g                          \
+ -Xmx1g                          \
+ -Xss256k                        \
+ -server                         \
+ -XX:+UseCompressedOops          \
+ -Djsse.enableSNIExtension=true  \
+ -Djava.awt.headless=true        \
+ -Dfile.encoding=UTF-8           \
+ -Duser.timezone=Europe/Moscow
+
+
+RUN sed -i 's/connectionTimeout="20000"/connectionTimeout="60000" useBodyEncodingForURI="true" socket.txBufSize="64000" socket.rxBufSize="64000" teamcity.options.users.synchronize="true"/' conf/server.xml
 
 EXPOSE 8080
 CMD ["./bin/catalina.sh", "run"]
 
 # --------------------------------------------------------------------- teamcity
-ENV TEAMCITY_VERSION 9.1.6
+ENV TEAMCITY_VERSION 9.1.7
 
 RUN curl -LO http://download.jetbrains.com/teamcity/TeamCity-$TEAMCITY_VERSION.war \
  && unzip -qq TeamCity-$TEAMCITY_VERSION.war -d webapps/teamcity                   \
@@ -53,3 +65,6 @@ ENV SLACK_NOTIFICATION_PLUGIN_VERSION 1.4.4
 
 RUN cd webapps/teamcity/WEB-INF/plugins \
  && curl -LO https://github.com/PeteGoo/tcSlackBuildNotifier/releases/download/$SLACK_NOTIFICATION_PLUGIN_VERSION/tcSlackNotificationsPlugin.zip
+
+RUN cd webapps/teamcity/WEB-INF/plugins \
+ && curl -LO https://bintray.com/artifact/download/jfrog/jfrog-jars/org/jfrog/teamcity/teamcity-artifactory-plugin/2.2.0/teamcity-artifactory-plugin-2.2.0.zip
